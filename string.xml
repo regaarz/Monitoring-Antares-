@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">IoT_Kelompok6</string>
+    <string name="smart_home_monitoring">Smart Home Monitoring IoT</string>
+    <string name="suhu_label">Suhu:</string>
+    <string name="kelembaban_label">Kelembaban:</string>
+    <string name="cahaya_label">Cahaya:</string>
+    <string name="refresh_data">Refresh Data</string>
+    <string name="kontrol_lampu_led">Kontrol Lampu LED</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+</resources>
