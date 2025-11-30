@@ -55,5 +55,45 @@ Pastikan untuk mengganti kredensial Antares dan WiFi pada kode Anda.
 
 const char* ssid = "Cari Gratisan yaa"; // GANTI DENGAN SSID WIFI
 const char* password = "yaudahsambunginaja"; // GANTI DENGAN PASSWORD WIFI\
+```
 
-🔁 Alur Kerja UtamaWiFi: Klien terhubung ke WiFi. Jika terputus, akan mencoba menghubungkan ulang.Baca Sensor: Baca Suhu dan Kelembaban dari DHT22.PUBLISH (Setiap ~5 detik):Data Suhu dan Kelembapan dikirim sebagai Content Instance baru ke Device MonitoringTemperature.SUBSCRIBE (Setiap ~5 detik):Mengambil Content Instance terbaru dari Device Button.Mengecek nilai key status.Jika status = "1" $\rightarrow$ LED ON.Jika status = "0" $\rightarrow$ LED OFF.
+### 🔁 Alur Kerja Utama
+
+Program ESP32 berjalan dalam siklus berulang, melakukan Publish data sensor dan Subscribe perintah kontrol secara bergantian.
+
+* **Koneksi WiFi**: Klien terhubung ke WiFi. Jika koneksi terputus, program akan mencoba menghubungkan ulang secara otomatis.
+* **Baca Sensor**: Baca nilai **Suhu** dan **Kelembapan** dari sensor DHT22.
+* **PUBLISH Data Sensor (Berkala)**:
+    * Data **Suhu** dan **Kelembapan** dikirim ke Antares pada Device **`MonitoringTemperature`**.
+* **SUBSCRIBE Perintah Kontrol (Berkala)**:
+    * Mengambil *Content Instance* terbaru dari Device **`Button`**.
+    * **Pengecekan Status**: Program mengecek nilai *key* **`status`** yang diterima.
+        * Jika `status` = **"1"** $\rightarrow$ **LED ON** (Pin GPIO 5 HIGH).
+        * Jika `status` = **"0"** $\rightarrow$ **LED OFF** (Pin GPIO 5 LOW).
+
+---
+
+📜 Logika Aplikasi (MainActivity.java)
+Aplikasi menggunakan Volley untuk dua jenis permintaan HTTP:
+
+1. Ambil Data Sensor (getDataSensor) - HTTP GET
+Endpoint Target: Device MonitoringTemperature (.../MonitoringTemperature/la)
+
+Aksi: Mengambil Content Instance terbaru (/la).
+
+Parsing: Mengurai respons JSON untuk mendapatkan nilai Suhu dan Kelembapan yang dienkapsulasi dalam key con.
+
+Result: Menampilkan nilai pada tvSuhu dan tvKelembaban.
+
+2. Kirim Perintah LED (kirimPerintahLed) - HTTP POST
+Endpoint Target: Device Button (.../Button)
+
+Aksi: Mengirim Content Instance baru.
+
+Payload yang dikirim:
+
+Status ON: {"m2m:cin": {"con": "{\"status\":\"1\"}"}}
+
+Status OFF: {"m2m:cin": {"con": "{\"status\":\"0\"}"}}
+
+Result: Perintah ini akan diterima dan dieksekusi oleh ESP32 pada siklus loop() berikutnya
