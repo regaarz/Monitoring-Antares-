@@ -97,3 +97,13 @@ Status ON: {"m2m:cin": {"con": "{\"status\":\"1\"}"}}
 Status OFF: {"m2m:cin": {"con": "{\"status\":\"0\"}"}}
 
 Result: Perintah ini akan diterima dan dieksekusi oleh ESP32 pada siklus loop() berikutnya
+
+---
+🚀 Langkah-Langkah Penggunaan
+Konfigurasi Antares: Buat Proyek (Tugas_IoT_Kelompok6) dan dua Device (MonitoringTemperature dan Button) di Antares. Catat ACCESS KEY Anda.
+
+Program ESP32: Sesuaikan kredensial WiFi dan Antares pada kode Arduino, lalu upload ke modul ESP32 Anda.
+
+Aplikasi Android: Pastikan konfigurasi (terutama ACCESS_KEY) pada MainActivity.java sudah sesuai, kemudian jalankan aplikasi di perangkat Android Anda.
+
+Uji Coba: Gunakan tombol Refresh Data untuk memantau suhu/kelembaban, dan tombol ON/OFF untuk mengontrol LED.
